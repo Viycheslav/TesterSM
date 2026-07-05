@@ -220,7 +220,7 @@ void loop() {
       break;
 
     case 2:
-      /* start stepper motor */
+      /* start stepper motor - меню проверки работы драйвера и шагового двигателя*/
       lcd.clear();
       // вывод меню на экран
       lcd.setCursor(0, 0);
@@ -237,9 +237,9 @@ void loop() {
       //включить двигатель
       digitalWrite(_ena, HIGH);
       
-      uint16_t time_delay=(uint16_t) 1000/freq;
+      uint16_t time_delay=(uint16_t) 1000/freq; //вычисление задержки переключения шагов при вращении двигателя
 
-      flag_ret=1;
+      //flag_ret=1;
 
       //обработка энкодера 
       for(;;){
