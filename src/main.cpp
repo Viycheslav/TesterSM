@@ -21,9 +21,9 @@ uint8_t flag_ret=0;
 uint8_t cursor_menu = 1;
 
 //Параметры для ШД по умолчанию
-uint16_t step = 200;  //количесто шагов на 1 шаг энкодера
-uint8_t dir = 0;      //направление вращения 1 - положительное, 0 - отрицательное
-uint16_t freq = 10;   //частота сигнала на выходе PUL (1..1000)
+uint16_t step = 50;  //количесто шагов на 1 шаг энкодера
+uint8_t dir = 1;      //направление вращения 1 - положительное, 0 - отрицательное
+uint16_t freq = 100;   //частота сигнала на выходе PUL (1..1000)
 int var_mov = 0;   //количество PUL для вращения двигателя
 
 int8_t pos = 0; //Переменная для работы с энкодером
@@ -36,7 +36,7 @@ void setup() {
   pinMode(_dir, OUTPUT);
   pinMode(_pul, OUTPUT);
 
-  digitalWrite(_ena, LOW);
+  digitalWrite(_ena, HIGH);
   digitalWrite(_dir, LOW);
   digitalWrite(_pul, LOW);
  
@@ -196,7 +196,7 @@ void loop() {
                 pos = enc.tickISR();//получить направление вращения по часовой -1, против часовой 1, нет вращения 0
                 freq = freq-pos;
                 //Определяем границы
-                if (freq<1) freq = 1;
+                if (freq<25) freq = 25;
                 if (freq>500) freq = 500;
                 lcd.setCursor(0, 3);
                 sprintf(buf, "* Freq: %4d", freq);
@@ -235,7 +235,7 @@ void loop() {
       lcd.print(buf);
 
       //включить двигатель
-      digitalWrite(_ena, HIGH);
+      digitalWrite(_ena, LOW);  //для запуска нужен низкий уровень
       
       uint16_t time_delay=(uint16_t) 1000/freq; //вычисление задержки переключения шагов при вращении двигателя
 
@@ -280,7 +280,7 @@ void loop() {
           while (enc.readBtn());
           delay(10);
           menu_num = 0;
-          digitalWrite(_ena, LOW);
+          digitalWrite(_ena, HIGH);   //Для остановки нужен высокий уровень
           break;
         }
       }
